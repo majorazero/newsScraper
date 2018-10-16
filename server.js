@@ -12,7 +12,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,"public")));
 
-mongoose.connect("mongodb://localhost/scraperScraper", {useNewUrlParser: true});
+if(process.env.MONGODB_URI){
+  mongoose.connect(process.env.MONGODB_URI);
+}
+else{
+  mongoose.connect("mongodb://localhost/scraperScraper", {useNewUrlParser: true});
+}
 
 require("./controllers/index.js")(app);
 
