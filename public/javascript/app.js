@@ -1,7 +1,20 @@
 $(document).ready(function(){
   $.get("/articles",function(data){
     contentBuilder(data);
-  })
+  });
+});
+
+$("#homeButton").on("click",function(){
+  $.get("/articles",function(data){
+    contentBuilder(data);
+  });
+});
+
+$("#showFavorites").on("click",function(){
+  $.get("/favorites",function(data){
+    $("#scraperBlock").empty();
+    contentBuilder(data);
+  });
 });
 
 $("#scrapeButton").on("click",function(){
@@ -41,6 +54,31 @@ function contentBuilder(data){
     button.on("click",function(){
       noteBuilder($(this).attr("data-id"));
     });
+
+    let favButton =$("<button>").attr("data-id",data[i]._id);
+    favButton.attr("data-saved",data[i].saved);
+    if(data[i].saved === false){
+      favButton.text("Favorite");
+    }
+    else{
+      favButton.text("Unfavorite");
+    }
+    favButton.on("click",function(){
+      //update a value in model to be true
+      $.ajax({
+        type: "PUT",
+        url: "/favorite",
+        data:{
+          id: $(this).attr("data-id"),
+          saved: $(this).attr("data-saved")
+        }
+      }).then(function(data){
+        console.log(data);
+        location.reload();
+      });
+    });
+    wrapper.append(favButton);
+
     wrapper.append(button);
     $("#scraperBlock").prepend(wrapper);
   }

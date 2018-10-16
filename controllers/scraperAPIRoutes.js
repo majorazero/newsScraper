@@ -15,6 +15,14 @@ module.exports = function(app){
     });
   });
 
+  app.get("/favorites",function(req,res){
+    db.Article.find({saved: true}).then(function(data){
+      res.json(data);
+    }).catch(function(err){
+      res.json(err);
+    });
+  });
+
   app.get("/articles/:id",function(req,res){
     db.Article.findOne({_id: req.params.id}).populate("notes").then(function(data){
       res.json(data);
@@ -75,5 +83,24 @@ module.exports = function(app){
     }).catch(function(err){
       res.json(err);
     });
-  })
+  });
+
+  app.put("/favorite",function(req,res){
+    let newSaved;
+    console.log(typeof req.body.saved);
+    if(req.body.saved === true || req.body.saved === "true"){
+      newSaved = false;
+    }
+    else{
+      newSaved = true;
+    }
+    console.log(newSaved);
+    db.Article.update({
+      _id: req.body.id
+    },{ $set:{
+      saved: newSaved}
+    }).then(function(data){
+      res.json("Updated!");
+    })
+  });
 };

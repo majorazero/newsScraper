@@ -21,6 +21,10 @@ let ArticleSchema = new Schema({
     type: String,
     require: "You got to have a non-empty string for the blurb!",
   },
+  saved: {
+    type: Boolean,
+    default: false
+  },
   notes: [{
     type: Schema.Types.ObjectId,
     ref: "Note"
