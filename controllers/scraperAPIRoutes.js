@@ -15,6 +15,14 @@ module.exports = function(app){
     });
   });
 
+  app.get("/articles/:id",function(req,res){
+    db.Article.findOne({_id: req.params.id}).populate("notes").then(function(data){
+      res.json(data);
+    }).catch(function(err){
+      res.json(err);
+    });
+  });
+
   app.post("/api/scrape",function(req,res){
     //we'll use axios to grab the site link
     axios.get(req.body.url).then(function(response){
@@ -57,8 +65,12 @@ module.exports = function(app){
       title: req.body.title,
       text: req.body.text
     }).then(function(note){
-      return db.Article.findOneAndUpdate({_id:req.params.id}, {note: note._id}, {new: true});
+      console.log(1);
+      console.log(note);
+      console.log(req.body.id);
+      return db.Article.findOneAndUpdate({_id:req.body.id}, {$push: {notes: note._id}});
     }).then(function(articleData){
+      console.log(articleData);
       res.json(articleData);
     }).catch(function(err){
       res.json(err);

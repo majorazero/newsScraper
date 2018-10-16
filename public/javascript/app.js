@@ -49,29 +49,42 @@ function contentBuilder(data){
 function noteBuilder(id){
   $("#commentBlock").empty();
   //append all previous notes here.
+  $.get("/articles/"+id,function(data){
+    for(let i = 0; i < data.notes.length; i++){
+      let notesWrap = $("<div>").addClass("noBlo");
+      $(notesWrap).append(`<h2>${data.notes[i].title}</h2>`);
+      $(notesWrap).append(`<h3>${data.notes[i].text}</h3>`);
+      $("#commentBlock").append(notesWrap);
+    }
+    console.log(data);
 
-
-  let wrapper = $("<div>");
-  wrapper.append("<h2>Title</h2>");
-  wrapper.append("<input id='noteTitle' type='text' placeholder='Title' />");
-  wrapper.append("<h2>Comment</h2>");
-  wrapper.append("<textarea id='noteText' class='noteArea'></textarea>");
-  let button = $("<button>").text("Submit");
-  button.on("click",function(){
-    //saves Notes
-    $.ajax({
-      url: "/api/notes",
-      type: "POST",
-      data: {
-        id: id,
-        title: $("#noteTitle").val(),
-        text: $("#noteText").val()
-      }
-    }).then(function(data){
-      $("#noteText").val("");
-      $("#noteTitle").val("");
+    let wrapper = $("<div>");
+    wrapper.append("<h2>Permenantly Etch Your Inane Opinions Here!</h2>");
+    wrapper.append("<h3>Title</h3>");
+    wrapper.append("<input id='noteTitle' type='text' placeholder='Title' />");
+    wrapper.append("<h3>Comment</h3>");
+    wrapper.append("<textarea id='noteText' class='noteArea'></textarea>");
+    let button = $("<button>").text("Submit");
+    button.attr("data-id",data._id);
+    button.on("click",function(){
+      let artId = $(this).attr("data-id");
+      //saves Notes
+      $.ajax({
+        url: "/api/notes",
+        type: "POST",
+        data: {
+          //article id
+          id: id,
+          title: $("#noteTitle").val(),
+          text: $("#noteText").val()
+        }
+      }).then(function(data){
+        $("#noteText").val("");
+        $("#noteTitle").val("");
+        noteBuilder(artId);
+      });
     });
+    wrapper.append(button);
+    $("#commentBlock").prepend(wrapper);
   });
-  wrapper.append(button);
-  $("#commentBlock").prepend(wrapper);
 }

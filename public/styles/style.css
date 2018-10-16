@@ -1,3 +1,12 @@
+.noBlo{
+  background-color: #939eaf;
+  margin: 2px;
+  border-radius: 3px;
+  padding: 5px;
+}
+.noBlo h2{
+  color: #464a51;
+}
 .scrapedArticles{
   transition: background-color 0.5s ease;
 }
