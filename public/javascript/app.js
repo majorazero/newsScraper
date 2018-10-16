@@ -12,7 +12,12 @@ $("#scrapeButton").on("click",function(){
       newTopic = "Home";
     }
     $("#currentPage").text(newTopic);
-    contentBuilder(data);
+    $.ajax({
+      url: "/articles",
+      type: "GET"
+    }).then(function(data){
+      contentBuilder(data);
+    });
   });
 });
 
@@ -30,6 +35,6 @@ function contentBuilder(data){
       //noteBuilder();
     });
     wrapper.append(button);
-    $("#scraperBlock").append(wrapper);
+    $("#scraperBlock").prepend(wrapper);
   }
 }
