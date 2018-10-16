@@ -44,8 +44,24 @@ module.exports = function(app){
       });
 
       db.Article.create(results).then(function(data){
+      }).catch(function(err){
+        return res.json(err);
       });
       res.json("Scraped");
     });
   });
+
+  app.post("/api/notes",function(req,res){
+    console.log(req.body);
+    db.Note.create({
+      title: req.body.title,
+      text: req.body.text
+    }).then(function(note){
+      return db.Article.findOneAndUpdate({_id:req.params.id}, {note: note._id}, {new: true});
+    }).then(function(articleData){
+      res.json(articleData);
+    }).catch(function(err){
+      res.json(err);
+    });
+  })
 };
