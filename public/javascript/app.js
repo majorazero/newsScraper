@@ -113,7 +113,7 @@ function noteBuilder(id){
     }
 
     let wrapper = $("<div>");
-    wrapper.append("<h2>Permenantly Etch Your Inane Opinions Here!</h2>");
+    wrapper.append("<h2><small id='semiNote'>Semi</small>Permenantly Etch Your Inane Opinions Here!</h2>");
     wrapper.append("<h3>Title</h3>");
     wrapper.append("<input id='noteTitle' type='text' placeholder='Title' />");
     wrapper.append("<h3>Comment</h3>");
