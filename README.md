@@ -2,7 +2,7 @@
 I'm going to that scrape the [LA Times](http://www.latimes.com/) website for articles. Educational purposes only, don't sue me.
 
 # Deployment
-It's current [deployed](https://dashboard.heroku.com/apps/agile-crag-85432)!
+It's current [deployed](https://agile-crag-85432.herokuapp.com/)!
 
 # Opening the Page
 If you want to serve the file locally, after you run `npm install` just run  `node server.js` and you can check out the app at your localhost address. You will have to have mongoDB set up and running, so if you don't, you should look up how to.
