@@ -88,13 +88,29 @@ function noteBuilder(id){
   $("#commentBlock").empty();
   //append all previous notes here.
   $.get("/articles/"+id,function(data){
+    console.log(data);
     for(let i = 0; i < data.notes.length; i++){
       let notesWrap = $("<div>").addClass("noBlo");
       $(notesWrap).append(`<h2>${data.notes[i].title}</h2>`);
       $(notesWrap).append(`<h3>${data.notes[i].text}</h3>`);
+      let deleteButton = $("<button>").text("Delete").attr("note-id",data.notes[i]._id).attr("article-id",data._id);
+      deleteButton.on("click",function(){
+        let noteId = $(this).attr("note-id");
+        let articleId = $(this).attr("article-id");
+        $.ajax({
+          type: "DELETE",
+          url: "/deleteNote",
+          data: {
+            noteId: noteId,
+            articleId: articleId
+          }
+        }).then(function(data){
+          noteBuilder(articleId);
+        });
+      });
+      $(notesWrap).append(deleteButton);
       $("#commentBlock").append(notesWrap);
     }
-    console.log(data);
 
     let wrapper = $("<div>");
     wrapper.append("<h2>Permenantly Etch Your Inane Opinions Here!</h2>");

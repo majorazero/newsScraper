@@ -103,4 +103,19 @@ module.exports = function(app){
       res.json("Updated!");
     })
   });
+
+  app.delete("/deleteNote",function(req,res){
+    //pull article reference first then delete note
+    db.Article.update({
+      _id: req.body.articleId
+    },{
+      $pull: {notes: {_id:req.body.noteId}}
+    }).then(function(data){
+      db.Note.find({
+        _id: req.body.noteId
+      }).remove().then(function(){
+        res.json("Deleted!");
+      })
+    });
+  });
 };
